@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Task;
 use Illuminate\Http\Request;
 use App\Services\TaskService;
+use Yajra\DataTables\DataTables;
 
 class TaskController extends Controller
 {
@@ -14,10 +16,24 @@ class TaskController extends Controller
         $this->taskService = $taskService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $tasks = $this->taskService->getAllTasks();
-        return view('tasks.index', compact('tasks'));
+        if ($request->ajax()) {
+            $tasks = Task::select(['id', 'name', 'description', 'date', 'created_at']);
+
+            return DataTables::of($tasks)
+                ->addColumn('action', function ($row) {
+                    $btn = '<a href="' . route('tasks.edit', $row->id) . '" class="edit btn btn-success btn-sm">Edit</a>';
+                    $btn .= ' <a href="' . route('tasks.destroy', $row->id) . '" class="delete btn btn-danger btn-sm">Delete</a>';
+                    return $btn;
+                })
+                ->editColumn('date', function ($row) {
+                    return $row->date ? $row->date->format('Y-m-d') : 'No Date';
+                })
+                ->make(true);
+        }
+
+        return view('tasks.index');
     }
 
     public function create()
