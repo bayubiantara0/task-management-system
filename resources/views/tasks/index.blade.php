@@ -11,11 +11,11 @@
 <body>
     <div class="container">
         <h1>Task Management</h1>
-        <a href="{{ route('tasks.create') }}" class="btn btn-primary">Create New Task</a>
+        <button id="create-task-btn" class="btn btn-primary">Create New Task</button>
         <table class="table table-bordered" id="task-table">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>No</th>
                     <th>Name</th>
                     <th>Description</th>
                     <th>Date</th>
@@ -32,8 +32,11 @@
                 serverSide: true,
                 ajax: "{{ route('tasks.index') }}",
                 columns: [{
-                        data: 'id',
-                        name: 'id'
+                        data: null, // Data tidak digunakan
+                        name: 'id',
+                        render: function(data, type, row, meta) {
+                            return meta.row + 1; // Menghitung nomor urut
+                        }
                     },
                     {
                         data: 'name',
@@ -75,6 +78,23 @@
                         }
                     });
                 }
+            });
+
+            // Handle show button click
+            $('#task-table').on('click', '.show', function() {
+                var id = $(this).data('id');
+                window.location.href = '/tasks/' + id; // redirect to show page
+            });
+
+            // Handle edit button click
+            $('#task-table').on('click', '.edit', function() {
+                var id = $(this).data('id');
+                window.location.href = '/tasks/' + id + '/edit'; // redirect to edit page
+            });
+
+            // Handle create task button click
+            $('#create-task-btn').on('click', function() {
+                window.location.href = '/tasks/create'; // redirect to create page
             });
         });
     </script>
