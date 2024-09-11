@@ -1,19 +1,11 @@
-<!DOCTYPE html>
-<html>
+@extends('layouts.tasklayout')
 
-<head>
-    <title>View Task</title>
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-</head>
+@section('title', 'Task Details')
 
-<body>
-    <div class="container">
-        <h1>Task Details</h1>
-        <p><strong>Name:</strong> {{ $task->name }}</p>
-        <p><strong>Description:</strong> {{ $task->description ?? 'No description provided' }}</p>
-        <p><strong>Date:</strong> {{ $task->date ? $task->date->format('d M Y') : 'No date set' }}</p>
-        <a href="{{ route('tasks.index') }}" class="btn btn-primary">Back to Tasks</a>
-    </div>
-</body>
-
-</html>
+@section('content')
+<h1>Task Details</h1>
+<p><strong>Name:</strong> {{ $task->name }}</p>
+<p><strong>Description:</strong> {{ $task->description }}</p>
+<p><strong>Date:</strong> {{ $task->date ? $task->date->format('Y-m-d') : 'N/A' }}</p>
+<a href="{{ route('tasks.index') }}" class="btn btn-primary">Back to List</a>
+@endsection
