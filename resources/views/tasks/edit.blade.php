@@ -22,7 +22,7 @@
             </div>
             <div class="form-group">
                 <label for="date">Date:</label>
-                <input type="date" id="date" name="date" class="form-control" value="{{ $task->date ? $task->date->format('Y-m-d') : '' }}">
+                <input type="date" id="date" name="date" class="form-control" value="{{ $task->date ? $task->date->format('Y-m-d') : '' }}" required>
             </div>
             <button type="submit" class="btn btn-primary">Update</button>
         </form>
