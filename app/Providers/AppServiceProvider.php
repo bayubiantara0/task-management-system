@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Repositories\TaskRepositoryInterface;
+use App\Repositories\TaskRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +15,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        // Bind the repository interface to its implementation
+        $this->app->bind(TaskRepositoryInterface::class, TaskRepository::class);
     }
 
     /**
