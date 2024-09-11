@@ -19,13 +19,13 @@ class TaskController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $tasks = Task::select(['id', 'name', 'description', 'date', 'created_at']);
+            $tasks = Task::select(['id', 'name', 'description', 'date']);
 
             return DataTables::of($tasks)
                 ->addColumn('action', function ($row) {
                     $btn = '<a href="' . route('tasks.show', $row->id) . '" class="show btn btn-success btn-sm">Show</a>';
                     $btn .= '<a href="' . route('tasks.edit', $row->id) . '" class="edit btn btn-success btn-sm">Edit</a>';
-                    $btn .= ' <a href="' . route('tasks.destroy', $row->id) . '" class="delete btn btn-danger btn-sm">Delete</a>';
+                    $btn .= ' <button class="delete btn btn-danger btn-sm" data-id="' . $row->id . '">Delete</button>';
                     return $btn;
                 })
                 ->editColumn('date', function ($row) {
@@ -81,6 +81,6 @@ class TaskController extends Controller
     public function destroy($id)
     {
         $this->taskService->deleteTask($id);
-        return redirect()->route('tasks.index');
+        return response()->json(['success' => 'Task deleted successfully']);
     }
 }

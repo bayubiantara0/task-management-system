@@ -19,7 +19,6 @@
                     <th>Name</th>
                     <th>Description</th>
                     <th>Date</th>
-                    <th>Created At</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -28,7 +27,7 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-            $('#task-table').DataTable({
+            var table = $('#task-table').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: "{{ route('tasks.index') }}",
@@ -49,16 +48,33 @@
                         name: 'date'
                     },
                     {
-                        data: 'created_at',
-                        name: 'created_at'
-                    },
-                    {
                         data: 'action',
                         name: 'action',
                         orderable: false,
                         searchable: false
                     },
                 ]
+            });
+
+            // Handle delete button click
+            $('#task-table').on('click', '.delete', function() {
+                var id = $(this).data('id');
+                if (confirm("Are you sure you want to delete this task?")) {
+                    $.ajax({
+                        url: '/tasks/' + id,
+                        type: 'DELETE',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            table.ajax.reload(null, false);
+                            alert('Task deleted successfully');
+                        },
+                        error: function(xhr) {
+                            alert('An error occurred while trying to delete the task.');
+                        }
+                    });
+                }
             });
         });
     </script>
