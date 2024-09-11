@@ -11,6 +11,7 @@
 <body>
     <div class="container">
         <h1>Task Management</h1>
+        <a href="{{ route('tasks.create') }}" class="btn btn-primary">Create New Task</a>
         <table class="table table-bordered" id="task-table">
             <thead>
                 <tr>
