@@ -23,7 +23,8 @@ class TaskController extends Controller
 
             return DataTables::of($tasks)
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="' . route('tasks.edit', $row->id) . '" class="edit btn btn-success btn-sm">Edit</a>';
+                    $btn = '<a href="' . route('tasks.show', $row->id) . '" class="show btn btn-success btn-sm">Show</a>';
+                    $btn .= '<a href="' . route('tasks.edit', $row->id) . '" class="edit btn btn-success btn-sm">Edit</a>';
                     $btn .= ' <a href="' . route('tasks.destroy', $row->id) . '" class="delete btn btn-danger btn-sm">Delete</a>';
                     return $btn;
                 })
