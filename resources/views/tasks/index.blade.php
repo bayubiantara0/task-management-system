@@ -17,6 +17,22 @@
     </thead>
 </table>
 
+@if(session('success'))
+<script type="text/javascript">
+    // SweetAlert untuk notifikasi sukses
+    Swal.fire({
+        title: 'Success!',
+        text: '{{ session("success") }}',
+        icon: 'success',
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true
+    });
+</script>
+@endif
+
 <script type="text/javascript">
     $(document).ready(function() {
         var table = $('#task-table').DataTable({
@@ -24,10 +40,10 @@
             serverSide: true,
             ajax: "{{ route('tasks.index') }}",
             columns: [{
-                    data: null, // Data tidak digunakan
+                    data: null,
                     name: 'id',
                     render: function(data, type, row, meta) {
-                        return meta.row + 1; // Menghitung nomor urut
+                        return meta.row + 1;
                     }
                 },
                 {
@@ -54,22 +70,40 @@
         // Handle delete button click
         $('#task-table').on('click', '.delete', function() {
             var id = $(this).data('id');
-            if (confirm("Are you sure you want to delete this task?")) {
-                $.ajax({
-                    url: '/tasks/' + id,
-                    type: 'DELETE',
-                    data: {
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(response) {
-                        table.ajax.reload(null, false);
-                        alert('Task deleted successfully');
-                    },
-                    error: function(xhr) {
-                        alert('An error occurred while trying to delete the task.');
-                    }
-                });
-            }
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/tasks/' + id,
+                        type: 'DELETE',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            table.ajax.reload(null, false);
+                            Swal.fire(
+                                'Deleted!',
+                                'Your task has been deleted.',
+                                'success'
+                            );
+                        },
+                        error: function(xhr) {
+                            Swal.fire(
+                                'Error!',
+                                'An error occurred while trying to delete the task.',
+                                'error'
+                            );
+                        }
+                    });
+                }
+            });
         });
 
         // Handle show button click

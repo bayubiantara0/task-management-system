@@ -51,7 +51,7 @@ class TaskController extends Controller
         ]);
 
         $this->taskService->createTask($request->all());
-        return redirect()->route('tasks.index');
+        return redirect()->route('tasks.index')->with('success', 'Task successfully created!');
     }
 
     public function show($id)
@@ -75,7 +75,7 @@ class TaskController extends Controller
         ]);
 
         $this->taskService->updateTask($id, $request->all());
-        return redirect()->route('tasks.index');
+        return redirect()->route('tasks.index')->with('success', 'Task successfully updated!');
     }
 
     public function destroy($id)
