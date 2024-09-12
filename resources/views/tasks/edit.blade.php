@@ -20,5 +20,6 @@
         <input type="date" id="date" name="date" class="form-control" value="{{ old('date', $task->date ? $task->date->format('Y-m-d') : '') }}">
     </div>
     <button type="submit" class="btn btn-primary">Update</button>
+    <a href="{{ route('tasks.index') }}" class="btn btn-secondary">Back</a> <!-- Tambahkan tombol Back -->
 </form>
 @endsection
