@@ -6,6 +6,7 @@ use App\Models\Task;
 use Illuminate\Http\Request;
 use App\Services\TaskService;
 use Yajra\DataTables\DataTables;
+use Yajra\DataTables\Html\Builder;
 
 class TaskController extends Controller
 {
@@ -16,7 +17,7 @@ class TaskController extends Controller
         $this->taskService = $taskService;
     }
 
-    public function index(Request $request)
+    public function index(Request $request, Builder $builder)
     {
         if ($request->ajax()) {
             $tasks = Task::select(['id', 'name', 'description', 'date']);
@@ -34,7 +35,21 @@ class TaskController extends Controller
                 ->make(true);
         }
 
-        return view('tasks.index');
+        $html = $builder->columns([
+            ['data' => 'id', 'name' => 'id', 'title' => 'ID'],
+            ['data' => 'name', 'name' => 'name', 'title' => 'Name'],
+            ['data' => 'description', 'name' => 'description', 'title' => 'Description'],
+            ['data' => 'date', 'name' => 'date', 'title' => 'Date'],
+            ['data' => 'action', 'name' => 'action', 'title' => 'Action', 'orderable' => false, 'searchable' => false],
+        ])
+            ->parameters([
+                'dom' => 'Bfrtip',
+                'buttons' => [
+                    'excel', // Enable Excel export button
+                ],
+            ]);
+
+        return view('tasks.index', compact('html'));
     }
 
     public function create()

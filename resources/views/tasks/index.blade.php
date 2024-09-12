@@ -39,6 +39,13 @@
             processing: true,
             serverSide: true,
             ajax: "{{ route('tasks.index') }}",
+            dom: 'Bfrtip', // Enable buttons extension
+            buttons: [
+                'excel', // Add Excel export button
+                'csv',
+                'pdf',
+                'print'
+            ],
             columns: [{
                     data: null,
                     name: 'id',
@@ -124,4 +131,11 @@
         });
     });
 </script>
+
+<link rel="stylesheet" href="//cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
+<script src="//cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+<script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.flash.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+<script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
 @endsection
